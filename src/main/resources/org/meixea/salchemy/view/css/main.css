@@ -1,0 +1,50 @@
+.root {
+    -fx-background-color: #c0c0c0;
+}
+
+.tool-bar {
+    -fx-background-color: #c0c0c0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 8, 0.1, 2, 2);
+}
+
+#status-bar {
+    -fx-background-color: #c0c0c0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 8, 0.1, 2, 2);
+}
+
+.accordion {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 8, 0.1, 2, 2);
+}
+.accordion > .titled-pane > .title {
+    -fx-background-color: #c0c0c0;
+    -fx-border-width: 1;
+    -fx-border-color: #a0a0a0;
+}
+.accordion > .titled-pane > *.content {
+    -fx-background-color: #c0c0c0;
+    -fx-border-width: 0;
+}
+
+.tab-pane>*.tab-header-area>*.tab-header-background {
+    -fx-background-color: #c0c0c0;
+}
+.tab {
+    -fx-background-color: #b0b0b0;
+}
+.tab:selected {
+    -fx-background-color: #c0c0c0;
+}
+.tab .tab-close-button:hover {
+    -fx-background-color: #ff2020;
+}
+.tab:selected .tab-label {
+    -fx-font-weight: bold;
+}
+.tab:selected .focus-indicator {
+    -fx-border-width: 0;
+    -fx-border-color: #c0c0c0;
+}
+#regsTable .table-column {
+    -fx-border-width: 0px;
+    -fx-border-color: #c0c0c0;
+}
