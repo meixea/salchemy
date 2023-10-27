@@ -1,5 +1,10 @@
 package org.meixea.salchemy.db;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import org.meixea.salchemy.model.*;
 
 import java.io.*;
@@ -10,24 +15,30 @@ import java.nio.file.Path;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 public class SqliteAlchemyDatabase implements AlchemyDatabase {
 
-    private String DATABASE_FILENAME = "alchemy.s3db";
+    private final String DATABASE_FILENAME;
+    private ExecutorService savingPool;
 
     protected Connection connection = null;
-    protected Statement statement = null;
+    private ReagentsBagOperator reagentsBagOperator;
+    private MaxPriceSearchOperator maxPriceSearchOperator;
 
-    public SqliteAlchemyDatabase(String appPath) throws ClassNotFoundException, SQLException, IOException {
+    public SqliteAlchemyDatabase(String appPath, String baseName, ExecutorService savingPool)
+            throws ClassNotFoundException, SQLException, IOException
+    {
+
+        DATABASE_FILENAME = baseName;
+        this.savingPool = savingPool;
+
         initDatabase(appPath);
     }
 
     @Override
     public void close(){
         try {
-
-            if(statement != null)
-                statement.close();
 
             if( connection != null )
                 connection.close();
@@ -41,101 +52,73 @@ public class SqliteAlchemyDatabase implements AlchemyDatabase {
             return Path.of(appPath, DATABASE_FILENAME).toString();
 
     }
-    @Override
-    public List<AlchemyProperty> getAllAlchemyProperties() throws SQLException {
+    private List<AlchemyProperty> loadAllAlchemyProperties() throws SQLException {
 
         List<AlchemyProperty> result = new ArrayList();
 
-        statement.execute("SELECT * FROM properties;");
+        try(Statement statement = connection.createStatement() ) {
 
-        try(ResultSet data = statement.getResultSet()) {
+            statement.execute("SELECT * FROM properties;");
 
-            while (data.next()) {
+            try(ResultSet data = statement.getResultSet()) {
 
-                int id = data.getInt("id");
-                String name = data.getString("name");
-                AlchemyType type = AlchemyType.values()[data.getInt("type")];
-                int price = data.getInt("price");
-                AlchemyPropertyCategory category = AlchemyPropertyCategory.values()[data.getInt("category")];
+                while (data.next()) {
 
-                result.add(new AlchemyProperty(id, name, type, price, category));
+                    int id = data.getInt("id");
+                    String name = data.getString("name");
+                    AlchemyType type = AlchemyType.values()[data.getInt("type")];
+                    int price = data.getInt("price");
+                    AlchemyPropertyCategory category = AlchemyPropertyCategory.values()[data.getInt("category")];
 
-            }
+                    result.add(new AlchemyProperty(id, name, type, price, category));
 
-        }
-
-        return result;
-    }
-    @Override
-    public List<Reagent> getAllReagents() throws SQLException {
-
-        AlchemyProperty.getAllProperties();
-        List<Reagent> result = new ArrayList<>();
-
-        statement.execute(
-                "SELECT " +
-                        "reagents.id AS reg_id, " +
-                        "reagents.name AS reg_name, " +
-                        "reagents.category AS reg_category, " +
-                        "properties.id AS prop_id " +
-                "FROM " +
-                        "reagents " +
-                "JOIN " +
-                        "reg_prop " +
-                    "ON " +
-                        "reagents.id=reg_prop.reagent " +
-                "JOIN " +
-                        "properties " +
-                    "ON " +
-                        "reg_prop.property=properties.id;"
-        );
-
-        try(ResultSet data = statement.getResultSet()) {
-
-            Reagent prevReagent = null;
-
-            while( data.next() ){
-
-                int id = data.getInt("reg_id");
-
-                if(prevReagent == null || prevReagent.idProperty().getValue() != id) {
-                    String name = data.getString("reg_name");
-                    AlchemyReagentCategory category = AlchemyReagentCategory.values()[data.getInt("reg_category")];
-                    prevReagent = new Reagent(id, name, category, new ArrayList<>());
-                    result.add(prevReagent);
                 }
 
-                AlchemyProperty property = AlchemyProperty.getProperty(data.getInt("prop_id"));
-                prevReagent.addProperty(property);
             }
         }
 
         return result;
     }
+    private List<Reagent> loadAllReagents(ModelData modelData) throws SQLException {
 
-    @Override
-    public String getReagent(int id){
+        List<Reagent> result = new ArrayList<>();
 
-        return null;
+        try(Statement statement = connection.createStatement() ) {
+            statement.execute(
+                    "SELECT " +
+                            "reagents.id AS reg_id, " +
+                            "reagents.name AS reg_name, " +
+                            "reagents.category AS reg_category, " +
+                            "properties.id AS prop_id " +
+                    "FROM " +
+                            "reagents " +
+                    "JOIN " +
+                            "reg_prop " +
+                        "ON " +
+                            "reagents.id=reg_prop.reagent " +
+                    "JOIN " +
+                            "properties " +
+                        "ON " +
+                            "reg_prop.property=properties.id;"
+            );
 
-    }
-    @Override
-    public ModelData loadModelData() throws SQLException {
-        ModelData result = new ModelData();
+            try(ResultSet data = statement.getResultSet()) {
 
-        try(Statement st = connection.createStatement()){
-            String query;
+                Reagent prevReagent = null;
 
-            query = "SELECT * FROM max_price_searches;";
-            st.execute(query);
+                while( data.next() ){
 
-            try(ResultSet resultSet = st.getResultSet()){
-                while(resultSet.next()){
+                    int id = data.getInt("reg_id");
 
-                    int id = resultSet.getInt("id");
-                    String name = resultSet.getString("name");
+                    if(prevReagent == null || prevReagent.idProperty().getValue() != id) {
+                        String name = data.getString("reg_name");
+                        AlchemyReagentCategory category = AlchemyReagentCategory.values()[data.getInt("reg_category")];
+                        prevReagent = new Reagent(id, name, category, new ArrayList<>());
+                        result.add(prevReagent);
+                    }
 
-                    result.maxPriceSearches.add(new MaxPriceSearch(id, name));
+                    AlchemyProperty property = modelData.getProperty(data.getInt("prop_id"));
+                    prevReagent.addProperty(property);
                 }
             }
         }
@@ -149,53 +132,69 @@ public class SqliteAlchemyDatabase implements AlchemyDatabase {
 
         String dataPath = getDatabasePath(appPath);
 
-        if(Files.exists(Path.of(dataPath)))
-            openDataBase(dataPath);
+        boolean isCreating = false;
 
+        if(Files.exists(Path.of(dataPath)))
+            connection = DriverManager.getConnection("jdbc:sqlite:" + dataPath);
         else {
 
             URL patternBase = this.getClass().getResource(DATABASE_FILENAME);
+
             if(patternBase == null) {
-                NewDatabase.createDataBase(dataPath);
-                openDataBase(dataPath);
+                connection = DriverManager.getConnection("jdbc:sqlite:" + dataPath);
+                isCreating = true;
             }
-            else
+            else {
                 unpackDataBase(dataPath, patternBase);
+                connection = DriverManager.getConnection("jdbc:sqlite:" + dataPath);
+            }
 
         }
 
-//        printDataBase();
+        reagentsBagOperator = new ReagentsBagOperator(connection, savingPool);
+        maxPriceSearchOperator = new MaxPriceSearchOperator(connection, savingPool);
+
+        if(isCreating){
+            System.out.println("Create base: " + dataPath);
+            createDataBase();
+        }
+
+        openDataBase();
+
+    }
+    private void createDataBase() throws SQLException {
+
+        NewDatabase.createDataBase(connection);
+
+        ReagentsBag bag = new ReagentsBag(1, FXCollections.observableArrayList());
+
+        reagentsBagOperator.saveReagentsBag(bag, null);
+
+        maxPriceSearchOperator.saveMaxPriceSearch(new MaxPriceSearch(
+                1,
+                new SimpleStringProperty(MaxPriceSearch.getDefaultSearchName(1)),
+                new SimpleObjectProperty(bag)
+        ), null);
 
     }
     @Override
-    public void deleteMaxPriceSearch(MaxPriceSearch search) throws SQLException {
+    public ModelData loadModelData() throws SQLException {
 
-        try(Statement st = connection.createStatement()) {
+        ModelData result = new ModelData();
 
-            String query = String.format("DELETE FROM max_price_searches WHERE id=%d;",
-                    search.idProperty().getValue());
+        result.alchemyProperties = loadAllAlchemyProperties();
 
-            st.execute(query);
+        result.alchemyReagents = FXCollections.observableList(loadAllReagents(result));
 
-        }
+//      Must be loaded first, because of dependencies
+        result.reagentBags = reagentsBagOperator.load(result.alchemyReagents);
 
-    }
-    @Override
-    public void saveMaxPriceSearch(MaxPriceSearch search) throws SQLException {
+        result.maxPriceSearches = maxPriceSearchOperator.load(result.reagentBags);
 
-        try(Statement st = connection.createStatement()) {
-
-            String query = String.format("INSERT INTO max_price_searches (id, name) VALUES (%d, '%s');",
-                    search.idProperty().getValue(), search.nameProperty().getValue());
-
-            st.execute(query);
-        }
+        return result;
     }
 
-    private void openDataBase(String fileName) throws SQLException {
-
-        connection = DriverManager.getConnection("jdbc:sqlite:" + fileName);
-        statement = connection.createStatement();
+    private void openDataBase() throws SQLException {
 
     }
     private void unpackDataBase(String dataPath, URL patternBase) throws IOException, SQLException {
@@ -213,36 +212,5 @@ public class SqliteAlchemyDatabase implements AlchemyDatabase {
 
         }
 
-        openDataBase(dataPath);
-    }
-
-    public void printDataBase() throws SQLException {
-
-        statement.execute(
-                "SELECT " +
-                        "reagents.id AS reg_id, reagents.name AS reg_name, properties.name AS prop " +
-                    "FROM " +
-                        "reagents " +
-                    "JOIN " +
-                        "reg_prop " +
-                    "ON " +
-                        "reagents.id=reg_prop.reagent " +
-                    "JOIN " +
-                        "properties " +
-                    "ON " +
-                        "reg_prop.property=properties.id;");
-
-        ResultSet result = statement.getResultSet();
-
-        while(result.next()){
-            System.out.printf(
-                    "%-3d  %-30s| %s\n",
-                    result.getInt("reg_id"),
-                    result.getString("reg_name"),
-                    result.getString("prop")
-            );
-        }
-
-        result.close();
     }
 }

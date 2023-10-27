@@ -24,20 +24,17 @@ public class Model {
 
     static public ModelData modelData;
 
-    static public void initialize(){
+    static public void initialize(String databaseFileName){
 
         try {
 
+            savingThreadPool = Executors.newSingleThreadExecutor();
+
             applicationPath = getApplicationPath();
 
-            database = new SqliteAlchemyDatabase(applicationPath);
-
-            AlchemyProperty.allProperties = database.getAllAlchemyProperties();
-            Reagent.allReagents = FXCollections.observableList(database.getAllReagents());
+            database = new SqliteAlchemyDatabase(applicationPath, databaseFileName, savingThreadPool);
 
             modelData = database.loadModelData();
-
-            savingThreadPool = Executors.newSingleThreadExecutor();
 
         }
         catch (ClassNotFoundException | SQLException | IOException e) {
@@ -47,7 +44,7 @@ public class Model {
         }
 
     }
-    static AlchemyDatabase getDatabase(){
+    static public AlchemyDatabase getDatabase(){
         return database;
     }
     static public void shutdown(){
@@ -85,30 +82,22 @@ public class Model {
     }
     static public MaxPriceSearch createMaxPriceSearch(){
 
-        MaxPriceSearch newSearch = getModelData().createMaxPriceSearch();
-        savingThreadPool.execute( () -> {
-            try {
-                getDatabase().saveMaxPriceSearch(newSearch);
-            } catch (SQLException e) {
-                System.out.printf("Can't save \"%s\" to database\n", newSearch.nameProperty().getValue());
-                System.out.println(e.getMessage());
-            }
-        } );
+        MaxPriceSearch newSearch = new MaxPriceSearch();
+
+//      Bag adding first, because of database saving dependencies
+        modelData.reagentBags.add(newSearch.bagProperty().getValue());
+
+        modelData.maxPriceSearches.add(newSearch);
 
         return newSearch;
     }
-    static public void deleteMaxPriceSearch(int id){
+    static public void deleteMaxPriceSearch(MaxPriceSearch search){
 
-        MaxPriceSearch search = getModelData().getMaxPriceSearch(id);
+//      Search removed first, because of database dependencies
+        modelData.maxPriceSearches.remove(search);
 
-        savingThreadPool.execute( () -> {
-            try {
-                getDatabase().deleteMaxPriceSearch(search);
-            } catch (SQLException e) {
-                System.out.printf("Can't delete \"%s\" from database\n", search.nameProperty().getValue());
-                System.out.println(e.getMessage());
-            }
-        } );
+        modelData.reagentBags.remove(search.bagProperty().getValue());
+
     }
     static public ExecutorService getSavingThreadPool(){
         return savingThreadPool;

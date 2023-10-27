@@ -9,7 +9,7 @@ import org.meixea.salchemy.model.Reagent;
 
 import java.util.HashMap;
 
-public class ReagentCategoryCell extends TableCell<Reagent, AlchemyReagentCategory> {
+public class ReagentCategoryCell<T> extends TextCell<T, AlchemyReagentCategory> {
 
     static private HashMap<AlchemyReagentCategory, Image> images = new HashMap<>();
     static {
@@ -25,8 +25,9 @@ public class ReagentCategoryCell extends TableCell<Reagent, AlchemyReagentCatego
     }
 
     ImageView child;
-    public ReagentCategoryCell(){
+    public ReagentCategoryCell(SelectionHandler<T> onClickHandler){
 
+        super(Pos.CENTER, onClickHandler);
         child = new ImageView();
         child.setFitHeight(16);
         child.setSmooth(true);
@@ -34,7 +35,6 @@ public class ReagentCategoryCell extends TableCell<Reagent, AlchemyReagentCatego
         child.setCache(true);
 
         setGraphic(child);
-        setAlignment(Pos.CENTER);
 
         setText("");
 

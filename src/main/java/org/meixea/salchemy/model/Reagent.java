@@ -10,16 +10,6 @@ import javafx.collections.ObservableList;
 import java.util.*;
 
 public class Reagent {
-    static ObservableList<Reagent> allReagents;
-    static public ObservableList<Reagent> getAllReagents(){
-        return allReagents;
-    }
-    static public Reagent getReagent(String name){
-        return allReagents.stream()
-                .filter( i -> i.nameProperty().getValue().equalsIgnoreCase(name))
-                .findAny()
-                .orElse(null);
-    }
     private final SimpleIntegerProperty id;
     private SimpleStringProperty name;
     private SimpleObjectProperty<AlchemyReagentCategory> category;
@@ -66,9 +56,6 @@ public class Reagent {
     }
     public boolean hasProperty(AlchemyProperty property){
         return properties.contains(property);
-    }
-    public boolean hasProperty(String property){
-        return properties.contains(AlchemyProperty.getProperty(property));
     }
     public SimpleIntegerProperty idProperty(){
         return id;

@@ -9,24 +9,47 @@ import java.util.List;
 
 public class ModelData {
 
-    public ObservableList<MaxPriceSearch> maxPriceSearches = FXCollections.observableArrayList();
-    public MaxPriceSearch createMaxPriceSearch(){
+    public List<AlchemyProperty> alchemyProperties;
+    public ObservableList<Reagent> alchemyReagents;
 
-        int maxId = maxPriceSearches.stream()
-                .mapToInt( search -> search.idProperty().getValue() )
-                .max()
-                .orElseThrow();
+    public ObservableList<MaxPriceSearch> maxPriceSearches;
 
-        MaxPriceSearch newSearch = new MaxPriceSearch(maxId + 1, null);
+    public ObservableList<ReagentsBag> reagentBags;
 
-        maxPriceSearches.add(newSearch);
+    public AlchemyProperty getProperty(String name){
+        return alchemyProperties.stream()
+                .filter(i -> i.getName().equalsIgnoreCase(name))
+                .findAny()
+                .orElse(null);
+    }
+    public AlchemyProperty getProperty(int id){
 
-        return newSearch;
+        if(id < 1 || id > alchemyProperties.size())
+            throw new IndexOutOfBoundsException("No such ID for AlchemyProperty");
+
+        return alchemyProperties.stream()
+                .filter(i -> i.getId() == id)
+                .findAny()
+                .orElse(null);
+    }
+    public Reagent getReagent(String name){
+        return alchemyReagents.stream()
+                .filter( i -> i.nameProperty().getValue().equalsIgnoreCase(name))
+                .findAny()
+                .orElse(null);
     }
 
+    public ReagentsBag getReagentsBag(int id){
+
+        return reagentBags.stream()
+                .filter( bag -> bag.getId() == id )
+                .findAny()
+                .orElse(null);
+    }
     public MaxPriceSearch getMaxPriceSearch(int id){
+
         return maxPriceSearches.stream()
-                .filter( search -> search.idProperty().getValue() == id )
+                .filter( search -> search.getId() == id )
                 .findAny()
                 .orElse(null);
     }

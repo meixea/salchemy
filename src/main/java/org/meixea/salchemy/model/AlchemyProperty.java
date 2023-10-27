@@ -4,27 +4,6 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class AlchemyProperty implements Comparable<AlchemyProperty> {
-
-    static List<AlchemyProperty> allProperties;
-    static public List<AlchemyProperty> getAllProperties(){
-        return allProperties;
-    }
-    static public AlchemyProperty getProperty(String name){
-        return allProperties.stream()
-                .filter(i -> i.getName().equalsIgnoreCase(name))
-                .findAny()
-                .orElse(null);
-    }
-    static public AlchemyProperty getProperty(int id){
-
-        if(id < 1 || id > allProperties.size())
-            throw new IndexOutOfBoundsException("No such ID for AlchemyProperty");
-
-        return allProperties.stream()
-                .filter(i -> i.getId() == id)
-                .findAny()
-                .orElse(null);
-    }
     private final int id;
     private String name;
     private AlchemyType type;

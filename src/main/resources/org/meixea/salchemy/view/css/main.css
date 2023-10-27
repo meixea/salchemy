@@ -48,3 +48,12 @@
     -fx-border-width: 0px;
     -fx-border-color: #c0c0c0;
 }
+#bagTable .table-column {
+    -fx-border-width: 0px;
+}
+#bagTable .table-row-cell {
+    -fx-background-color: #d5ffd5;
+}
+#bagTable .cell {
+    -fx-text-fill: black;
+}

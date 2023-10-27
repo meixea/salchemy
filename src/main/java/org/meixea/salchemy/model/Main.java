@@ -9,9 +9,11 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class Main {
+
+    static private String MAIN_DATABASE_FILENAME = "alchemy.s3db";
     public static void main(String[] args) {
 
-        Model.initialize();
+        Model.initialize(MAIN_DATABASE_FILENAME);
 
         AlchemyApplication.main(args);
 

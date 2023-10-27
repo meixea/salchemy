@@ -4,14 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="843cc068-c9b4-4f7a-a98c-12ddccab15ad" name="Changes" comment="Start.">
+    <list default="true" id="843cc068-c9b4-4f7a-a98c-12ddccab15ad" name="Changes" comment="1.0-snapshot">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/controller/AlchemyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/controller/AlchemyController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/controller/MaxPriceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/controller/MaxPriceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/db/AlchemyDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/db/AlchemyDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/db/NewDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/db/NewDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/db/SqliteAlchemyDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/db/SqliteAlchemyDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/model/AlchemyProperty.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/model/AlchemyProperty.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/model/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/model/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/view/AlchemyApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/view/AlchemyApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/meixea/salchemy/view/main-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/meixea/salchemy/view/main-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/model/MaxPriceSearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/model/MaxPriceSearch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/model/Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/model/Model.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/model/ModelData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/model/ModelData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/model/Reagent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/model/Reagent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/model/ReagentsBag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/model/ReagentsBag.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/view/ReagentCategoryCell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/meixea/salchemy/view/ReagentCategoryCell.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/meixea/salchemy/view/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/meixea/salchemy/view/css/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/meixea/salchemy/view/max-price.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/meixea/salchemy/view/max-price.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/meixea/salchemy/db/SqliteAlchemyDatabaseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/meixea/salchemy/db/SqliteAlchemyDatabaseTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,9 +31,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Enum" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -94,14 +104,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="All in SAlchemy (5)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="SAlchemy" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="All in SAlchemy" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="SAlchemy" />
       <option name="PACKAGE_NAME" value="" />
@@ -125,13 +127,29 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="SqliteAlchemyDatabaseTest.savingMaxPriceChanges" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="SAlchemy" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.meixea.salchemy.db.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.meixea.salchemy.db" />
+      <option name="MAIN_CLASS_NAME" value="org.meixea.salchemy.db.SqliteAlchemyDatabaseTest" />
+      <option name="METHOD_NAME" value="savingMaxPriceChanges" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.SqliteAlchemyDatabaseTest" />
-        <item itemvalue="JUnit.All in SAlchemy (1)" />
-        <item itemvalue="JUnit.All in SAlchemy (5)" />
         <item itemvalue="JUnit.All in SAlchemy" />
+        <item itemvalue="JUnit.SqliteAlchemyDatabaseTest.savingMaxPriceChanges" />
+        <item itemvalue="JUnit.All in SAlchemy (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -151,7 +169,14 @@
       <option name="project" value="LOCAL" />
       <updated>1696915847136</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="1.0-snapshot">
+      <created>1697874874366</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1697874874366</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -166,7 +191,10 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="Start." />
-    <option name="LAST_COMMIT_MESSAGE" value="Start." />
+    <MESSAGE value="1.0-snapshot" />
+    <option name="LAST_COMMIT_MESSAGE" value="1.0-snapshot" />
   </component>
 </project>

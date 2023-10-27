@@ -7,54 +7,66 @@ import java.sql.*;
 
 public class NewDatabase {
 
-    private static Connection connection;
-    private static Statement statement;
+    public static void createDataBase(Connection connection) throws SQLException {
 
-    public static void createDataBase(String fileName) throws SQLException {
+        try(Statement statement = connection.createStatement()) {
+            statement.execute(
+                    "CREATE TABLE reagents (" +
+                            "id         INTEGER PRIMARY KEY, " +
+                            "name       TEXT NOT NULL, " +
+                            "category   INTEGER" +
+                    ");"
+            );
 
-        System.out.println("Create base");
+            statement.execute(
+                    "CREATE TABLE properties (" +
+                            "id         INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            "name       TEXT NOT NULL, " +
+                            "type       INTEGER NOT NULL, " +
+                            "price      INTEGER NOT NULL, " +
+                            "category   INTEGER" +
+                    ");"
+            );
 
-        connection = DriverManager.getConnection("jdbc:sqlite:" + fileName);
+            statement.execute(
+                    "CREATE TABLE reg_prop (" +
+                            "property   REFERENCES properties(id), " +
+                            "reagent    REFERENCES reagents(id), " +
+                            "CONSTRAINT id PRIMARY KEY (property, reagent) " +
+                    ");"
+            );
 
-        statement = connection.createStatement();
+            statement.execute(
+                    "CREATE TABLE reagents_bag (" +
+                            "bag_id     INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            "reserved   TEXT" +
+                    ");"
+            );
 
-        statement.execute(
-                "CREATE TABLE reagents (" +
-                        "id         INTEGER PRIMARY KEY, " +
-                        "name       TEXT NOT NULL, " +
-                        "category   INTEGER" +
-                ");");
+            statement.execute(
+                    "CREATE TABLE reagent_in_bag (" +
+                            "bag_id             REFERENCES reagents_bag(id), " +
+                            "reagent_id         REFERENCES reagents(id), " +
+                            "quantity_initial   INTEGER, " +
+                            "quantity_final   INTEGER, " +
+                            "CONSTRAINT id PRIMARY KEY (bag_id, reagent_id) " +
+                    ");"
+            );
 
-        statement.execute(
-                "CREATE TABLE properties (" +
-                        "id         INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "name       TEXT NOT NULL, " +
-                        "type       INTEGER NOT NULL, " +
-                        "price      INTEGER NOT NULL, " +
-                        "category   INTEGER" +
-                ");");
+            statement.execute(
+                    "CREATE TABLE max_price_searches (" +
+                            "id         INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            "bag_id     REFERENCES reagents_bag(id), " +
+                            "name       TEXT" +
+                    ");"
+            );
 
-        statement.execute(
-                "CREATE TABLE reg_prop (" +
-                        "property   REFERENCES properties(id), " +
-                        "reagent    REFERENCES reagents(id), " +
-                        "CONSTRAINT id PRIMARY KEY (property, reagent) " +
-                ");");
+            fillPropTable(statement);
+            fillReagentsTable(statement);
 
-        statement.execute(
-                "CREATE TABLE max_price_searches (" +
-                        "id         INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "name       TEXT" +
-                ");");
-
-        fillPropTable();
-        fillReagentsTable();
-        fillMaxPriceSearchesTable();
-
-        statement.close();
-        connection.close();
+        }
     }
-    private static void fillPropTable() throws SQLException {
+    private static void fillPropTable(Statement statement) throws SQLException {
 
         try(BufferedReader reader = new BufferedReader(new FileReader("properties.txt"))){
 
@@ -63,7 +75,7 @@ public class NewDatabase {
                 String line = reader.readLine();
 
                 if( !line.equals("") )
-                    parsePropertyString(line);
+                    parsePropertyString(line, statement);
 
             }
 
@@ -73,7 +85,7 @@ public class NewDatabase {
         }
 
     }
-    private static void parsePropertyString(String line) throws SQLException {
+    private static void parsePropertyString(String line, Statement statement) throws SQLException {
 
         String[] parts = line.split("#");
 
@@ -99,7 +111,7 @@ public class NewDatabase {
 
         statement.execute(query);
     }
-    private static void fillReagentsTable() throws SQLException {
+    private static void fillReagentsTable(Statement statement) throws SQLException {
 
         try(BufferedReader reader = new BufferedReader(new FileReader("reagents.txt"))){
 
@@ -109,7 +121,7 @@ public class NewDatabase {
                 String line = reader.readLine();
 
                 if( !line.equals("") )
-                    parseReagentString(id++, line);
+                    parseReagentString(id++, line, statement);
 
             }
 
@@ -118,7 +130,7 @@ public class NewDatabase {
             e.printStackTrace();
         }
     }
-    private static void parseReagentString(int id, String line) throws SQLException {
+    private static void parseReagentString(int id, String line, Statement statement) throws SQLException {
 
         String[] parts = line.split("#");
 
@@ -143,12 +155,12 @@ public class NewDatabase {
 
             statement.execute(query);
 
-            ResultSet result = statement.getResultSet();
-            result.next();
+            int propId;
+            try(ResultSet result = statement.getResultSet()) {
+                result.next();
 
-            int propId = result.getInt("id");
-
-            result.close();
+                propId = result.getInt("id");
+            }
 
             query = String.format(
                     "INSERT INTO reg_prop (property, reagent) VALUES (%d, %d);",
@@ -157,14 +169,7 @@ public class NewDatabase {
             );
 
             statement.execute(query);
-
         }
 
     }
-    static private void fillMaxPriceSearchesTable() throws SQLException {
-        statement.execute(
-                "INSERT INTO max_price_searches (id, name) VALUES (1, NULL);"
-        );
-    }
-
 }

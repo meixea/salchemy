@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -14,9 +13,19 @@
             <tabs>
             </tabs>
         </TabPane>
-      <SplitPane dividerPositions="0.3" minHeight="200.0" orientation="VERTICAL" prefHeight="400.0" prefWidth="260.0" HBox.hgrow="NEVER">
+      <SplitPane dividerPositions="0.3" minHeight="200.0" orientation="VERTICAL" prefHeight="400.0" prefWidth="340.0" HBox.hgrow="NEVER">
         <items>
-          <AnchorPane maxHeight="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="100.0" />
+          <AnchorPane maxHeight="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="100.0">
+               <children>
+                  <TableView fx:id="bagTable" focusTraversable="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                      <TableColumn fx:id="bagCategoryColumn" editable="false" minWidth="-Infinity" prefWidth="30.0" resizable="false" text="Тип" />
+                      <TableColumn fx:id="bagNameColumn" editable="false" prefWidth="75.0" resizable="false" text="Название" />
+                        <TableColumn fx:id="bagQuantityColumn" editable="false" maxWidth="65.0" minWidth="65.0" prefWidth="65.0" resizable="false" text="Кол-во" />
+                        <TableColumn fx:id="bagSurplusColumn" editable="false" maxWidth="55.0" minWidth="55.0" prefWidth="55.0" resizable="false" text="Остаток" />
+                    </columns>
+                  </TableView>
+               </children></AnchorPane>
           <AnchorPane maxHeight="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
                <children>
                   <TableView fx:id="regsTable" focusTraversable="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
