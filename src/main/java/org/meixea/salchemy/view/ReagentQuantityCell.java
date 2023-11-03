@@ -26,6 +26,8 @@ public class ReagentQuantityCell<S> extends TableCell<S, SimpleIntegerProperty> 
     @Override
     public void updateItem(SimpleIntegerProperty item, boolean empty){
 
+        super.updateItem(item, empty);
+
         if(oldItem != null)
             oldItem.unbind();
 

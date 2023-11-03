@@ -50,6 +50,9 @@ public class Model {
     static public void shutdown(){
 
         savingThreadPool.shutdown();
+        for(MaxPriceSearch search : modelData.maxPriceSearches)
+            search.cancelCalculation();
+        MaxPriceSearch.shutdown();
 
         try {
             database.close();

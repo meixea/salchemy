@@ -165,7 +165,15 @@ public class MaxPriceController {
             Model.deleteMaxPriceSearch(search);
         });
 
-        tab.setContent(new AnchorPane());
+        AnchorPane anchorPane = new AnchorPane();
+        TableView resultTable = new MaxPriceResultTableView(search);
+        anchorPane.setTopAnchor(resultTable, 0.0);
+        anchorPane.setLeftAnchor(resultTable, 0.0);
+        anchorPane.setRightAnchor(resultTable, 0.0);
+        anchorPane.setBottomAnchor(resultTable, 0.0);
+        anchorPane.getChildren().add(resultTable);
+
+        tab.setContent(anchorPane);
 
         searchesTabPane.getTabs().add(tab);
 
@@ -215,8 +223,8 @@ public class MaxPriceController {
         Platform.runLater( () -> {
             regsTable.getSelectionModel().clearSelection();
             regsTable.getItems().remove(reagent);
+            bagTable.getItems().add(new ReagentInBag(reagent, 10, 10));
         } );
-        bagTable.getItems().add(new ReagentInBag(reagent, 10, 10));
 
     }
     private void deleteReagentFromBag(ReagentInBag rib){

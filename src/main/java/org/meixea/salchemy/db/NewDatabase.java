@@ -61,6 +61,30 @@ public class NewDatabase {
                     ");"
             );
 
+            statement.execute(
+                    "CREATE TABLE potions (" +
+                            "potion_id  INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            "price      INTEGER NOT NULL, " +
+                            "quantity   INTEGER NOT NULL" +
+                    ");"
+            );
+
+            statement.execute(
+                    "CREATE TABLE potion_reagents (" +
+                            "potion_id          REFERENCES potions(potion_id), " +
+                            "reagent_id         REFERENCES reagents(id), " +
+                            "CONSTRAINT id PRIMARY KEY (potion_id, reagent_id) " +
+                    ");"
+            );
+
+            statement.execute(
+                    "CREATE TABLE maxpricesearch_potions (" +
+                            "potion_id          REFERENCES potions(potion_id), " +
+                            "search_id          REFERENCES max_price_searches(id), " +
+                            "CONSTRAINT id PRIMARY KEY (potion_id, search_id) " +
+                    ");"
+            );
+
             fillPropTable(statement);
             fillReagentsTable(statement);
 

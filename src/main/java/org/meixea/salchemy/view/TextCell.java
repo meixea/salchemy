@@ -15,6 +15,9 @@ public class TextCell<S, T> extends TableCell<S, T> {
     }
     @Override
     public void updateItem(T item, boolean empty){
+
+        super.updateItem(item, empty);
+
         if(empty)
             setText(null);
         else

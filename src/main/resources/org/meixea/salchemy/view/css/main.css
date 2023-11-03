@@ -57,3 +57,101 @@
 #bagTable .cell {
     -fx-text-fill: black;
 }
+.calc-result-table {
+    -fx-background-color: #c0c0c0;
+}
+.calc-result-table .table-column {
+    -fx-background-color: #c0c0c0;
+    -fx-padding: 0;
+}
+.calc-result-table .column-header-background {
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+}
+.price-result-column {
+    -fx-pref-width: 60px;
+    -fx-min-width: 60px;
+    -fx-max-width: 60px;
+}
+.price-result-column.cell {
+    -fx-border-color: #c0c0c0;
+    -fx-border-width: 0;
+    -fx-font-weight: bold;
+    -fx-font-size: 1.5em;
+    -fx-alignment: center;
+}
+.calc-result-table .table-column.properties-result-column {
+    -fx-border-color: #30c070;
+    -fx-border-width: 0;
+    -fx-alignment: center;
+    -fx-padding: 0;
+}
+.potion-properties-tableview {
+    -fx-focus-traversable: false;
+    -fx-padding: 0;
+    -fx-border-width: 1 0 1 0;
+    -fx-border-color: #909090;
+}
+.potion-properties-tableview .scroll-bar * {
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+    -fx-max-width: 0;
+    -fx-pref-width: 0;
+    -fx-min-width: 0;
+}
+
+.potion-properties-tableview .table-column {
+    -fx-border-width: 0;
+}
+.potion-properties-tableview .cell {
+    -fx-padding: 0;
+    -fx-background-color: #30df10;
+}
+.potion-properties-tableview .cell.price {
+    -fx-font-size: 0.8em;
+    -fx-pref-width: 3em;
+    -fx-alignment: center;
+}
+.potion-properties-tableview .cell.name {
+    -fx-font-size: 1em;
+    -fx-alignment: center-left;
+}
+.potion-properties-tableview .cell.potion {
+    -fx-background-color: #b0dfb0;
+}
+.potion-properties-tableview .cell.poison {
+    -fx-background-color: #dfb0b0;
+}
+.potion-properties-tableview .column-header-background {
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+}
+.potion-reagents-tableview {
+    -fx-focus-traversable: false;
+    -fx-padding: 0;
+    -fx-border-width: 1 0 1 0;
+    -fx-border-color: #909090;
+}
+.potion-reagents-tableview .scroll-bar * {
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+    -fx-max-width: 0;
+    -fx-pref-width: 0;
+    -fx-min-width: 0;
+}
+.potion-reagents-tableview .table-column {
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+.potion-reagents-tableview .cell {
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+.calc-result-table .table-column.reagents-result-column {
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}

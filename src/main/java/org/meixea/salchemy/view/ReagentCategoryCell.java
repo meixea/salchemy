@@ -44,6 +44,7 @@ public class ReagentCategoryCell<T> extends TextCell<T, AlchemyReagentCategory> 
 
         super.updateItem(item, empty);
 
+        setText(null);
         child.setImage(images.get(item));
     }
 }

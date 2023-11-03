@@ -71,13 +71,13 @@ public class ReagentsBag {
         return result;
     }
 */
-    public int getSurplus(Reagent reagent){
+    public int getQuantity(Reagent reagent){
 
         ReagentInBag rib = findReagent(reagent);
         if(rib == null)
             return 0;
 
-        return rib.surplusProperty().getValue();
+        return rib.quantityProperty().getValue();
 
     }
     public int getId(){
@@ -85,7 +85,7 @@ public class ReagentsBag {
     }
     public int getPotionsAvailable(Potion potion){
         return potion.getFormula().stream()
-                .mapToInt( i -> getSurplus(i) )
+                .mapToInt( reagent -> getQuantity(reagent) )
                 .min()
                 .orElse(0);
     }
@@ -93,7 +93,15 @@ public class ReagentsBag {
 
         ReagentInBag rib = findReagent(reagent);
 
-        rib.quantityProperty().set(rib.quantityProperty().getValue() - amount);
+        if(rib == null)
+            return;
+
+        int newAmount = rib.quantityProperty().getValue() - amount;
+
+        if(newAmount == 0)
+            reagents.remove(rib);
+        else
+            rib.quantityProperty().set(newAmount);
 
     }
     public void removeSurplus(Reagent reagent, int amount){
@@ -103,6 +111,10 @@ public class ReagentsBag {
         rib.surplusProperty().set(rib.surplusProperty().getValue() - amount);
 
     }
+    public void removePotionReagents(Potion potion){
+        potion.getFormula().stream()
+                .forEach( reagent -> removeQuantity(reagent, potion.getQuantity()) );
+    }
     public int wasteMaxReagents(Potion potion){
 
         int amount = getPotionsAvailable(potion);
@@ -111,6 +123,11 @@ public class ReagentsBag {
                 .forEach( reagent -> removeSurplus(reagent, amount) );
 
         return amount;
+    }
+    public void setSurplusValues(ReagentsBag other){
+        reagents.stream().forEach(rib -> {
+            rib.surplusProperty().setValue(other.getQuantity(rib.getReagent()));
+        });
     }
 
     public ObservableList<ReagentInBag> getReagents(){

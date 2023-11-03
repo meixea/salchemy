@@ -5,7 +5,11 @@ import java.util.*;
 public class Potion implements Comparable<Potion> {
     private List<Reagent> formula = new ArrayList<>();
     private int price;
-    public Potion(){}
+    private int quantity = 0;
+    private int potion_id = -1;
+    public Potion(){
+        price = 0;
+    }
     public Potion(Reagent r1, Reagent r2){
         Collections.addAll(formula, r1, r2);
         calculatePrice();
@@ -38,7 +42,7 @@ public class Potion implements Comparable<Potion> {
     public boolean equals(Object o){
         if(this == o)
             return true;
-        if(this.getClass() != o.getClass())
+        if(o == null || this.getClass() != o.getClass())
             return false;
 
         Potion other = (Potion) o;
@@ -77,5 +81,27 @@ public class Potion implements Comparable<Potion> {
     }
     public int size(){
         return formula.size();
+    }
+
+    public int getPotion_id() {
+        return potion_id;
+    }
+
+    public void setPotion_id(int potion_id) {
+        this.potion_id = potion_id;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+    @Override
+    public String toString(){
+        StringJoiner joiner = new StringJoiner(", ");
+        formula.stream().forEach( reagent -> joiner.add(reagent.nameProperty().getValue()) );
+        return String.format("(%s)[%d]x%d", joiner, price, quantity);
     }
 }

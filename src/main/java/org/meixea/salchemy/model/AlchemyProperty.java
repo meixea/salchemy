@@ -65,4 +65,8 @@ public class AlchemyProperty implements Comparable<AlchemyProperty> {
         return this.getId() == other.getId();
 
     }
+    @Override
+    public String toString(){
+        return String.format("%s(%d)", getName(), getPrice());
+    }
 }
